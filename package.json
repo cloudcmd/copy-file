@@ -1,0 +1,53 @@
+{
+  "name": "@cloudcmd/copy-file",
+  "version": "1.0.0",
+  "description": "simply copy a file",
+  "main": "lib/copy-file.js",
+  "scripts": {
+    "wisdom": "npm run build",
+    "watch:coverage": "npm run watcher -- npm run coverage",
+    "watch:test": "npm run watcher -- npm test",
+    "watcher": "nodemon -w test -w lib --exec",
+    "test": "tape test/*.js",
+    "coverage": "nyc npm test",
+    "report": "nyc report --reporter=text-lcov | coveralls",
+    "lint:lib": "eslint lib",
+    "lint:test": "eslint test -c .eslintrc.test",
+    "lint": "redrun lint:*"
+  },
+  "dependencies": {
+    "pipe-io": "^3.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "es6-promisify": "^6.0.0",
+    "eslint": "^4.0.0",
+    "eslint-plugin-node": "^6.0.1",
+    "nodemon": "^1.11.0",
+    "nyc": "^11.0.2",
+    "redrun": "^6.0.0",
+    "sinon": "^5.0.3",
+    "sinon-called-with-diff": "^2.0.0",
+    "tape": "^4.2.0",
+    "through2": "^2.0.3",
+    "try-to-catch": "^1.0.2"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cloudcmd/copy-file.git"
+  },
+  "keywords": [
+    "copy",
+    "stream",
+    "file"
+  ],
+  "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cloudcmd/copy-file/issues"
+  },
+  "homepage": "https://github.com/cloudcmd/copy-file"
+}
