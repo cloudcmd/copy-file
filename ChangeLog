@@ -1,0 +1,5 @@
+2018.05.03, v1.1.0
+
+feature:
+- (copy-file) add ability to remove dest file if an error occurs after the dest file has been opened for writing
+
