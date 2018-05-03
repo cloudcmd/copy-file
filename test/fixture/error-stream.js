@@ -2,7 +2,7 @@ const {Readable} = require('stream');
 
 module.exports = (error) => () => {
     return new Readable({
-        read(size) {
+        read() {
             process.nextTick(() => this.emit('error', error));
         }
     });
