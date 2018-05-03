@@ -16,7 +16,9 @@
     "lint": "redrun lint:*"
   },
   "dependencies": {
-    "pipe-io": "^3.0.0"
+    "pipe-io": "^3.0.0",
+    "wraptile": "^2.0.0",
+    "zames": "^2.0.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
@@ -26,10 +28,13 @@
     "nodemon": "^1.11.0",
     "nyc": "^11.0.2",
     "redrun": "^6.0.0",
+    "rimraf": "^2.6.2",
     "sinon": "^5.0.3",
     "sinon-called-with-diff": "^2.0.0",
+    "squad": "^2.0.0",
     "tape": "^4.2.0",
     "through2": "^2.0.3",
+    "try-catch": "^2.0.0",
     "try-to-catch": "^1.0.2"
   },
   "engines": {

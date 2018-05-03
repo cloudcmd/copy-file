@@ -1,6 +1,6 @@
 # Copy File [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL] [![Coverage Status][CoverageIMGURL]][CoverageURL]
 
-Simply copy a file.
+Simply copy a file. If an error occurs after the destination file has been opened for writing, `copy-file` will attempt to remove the destination.
 
 
 ## Install

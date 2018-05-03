@@ -1,18 +1,28 @@
 'use strict';
 
 const fs = require('fs');
+const {tmpdir} = require('os');
+const {join} = require('path');
 
 const test = require('tape');
+const tryCatch = require('try-catch');
 const tryToCatch = require('try-to-catch');
 const copyFile = require('..');
 const noop = () => {};
 const {promisify} = require('es6-promisify');
 const through2 = require('through2');
+const rimraf = require('rimraf');
+const squad = require('squad');
 
 const diff = require('sinon-called-with-diff');
 const sinon = diff(require('sinon'));
 
+const getErrorStream = require('./fixture/error-stream');
+
 const echo = (chunk, enc, fn) => fn(chunk);
+const getEACCESStream = squad(getErrorStream, getEACCESS);
+
+const temp = () => fs.mkdtempSync(join(tmpdir(), 'copy-file-'));
 
 test('copyFile: no args', (t) => {
     t.throws(copyFile, /src should be a string!/, 'should throw when no args');
@@ -87,3 +97,64 @@ test('copyFile: no src', async (t) => {
     t.end();
 });
 
+test('copyFile: src: EACCESS', async (t) => {
+    const src = '/boot/System.map-4.4.0-122-generic1'
+    const tmpdir = temp();
+    const dest = `${tmpdir}/EACCESS`;
+    
+    const {
+        createReadStream,
+        stat,
+    } = fs;
+    
+    fs.stat = (_, fn) => fn(null, {
+        mod: 777
+    });
+    
+    fs.createReadStream = getEACCESStream(src);
+    
+    const _copyFile = promisify(rerequire('..'));
+    
+    await tryToCatch(_copyFile, src, dest);
+    const [e] = tryCatch(fs.statSync, dest);
+    
+    fs.stat = stat;
+    fs.createReadStream = createReadStream;
+    rimraf.sync(tmpdir);
+    
+    t.equal(e && e.code, 'ENOENT', 'should call unlink');
+    t.end();
+});
+
+test('copyFile', async (t) => {
+    const src = __filename;
+    const tmp = temp();
+    const dest = `${tmp}/copy`;
+    
+    const _copyFile = promisify(rerequire('..'));
+    
+    await tryToCatch(_copyFile, src, dest);
+    const [e] = tryCatch(fs.statSync, dest);
+    
+    rimraf.sync(tmp);
+    
+    t.notOk(e, 'should copy file');
+    t.end();
+});
+
+function getEACCESS(path) {
+    return {
+        Error: `EACCES: permission denied, open '${path}`,
+        errno: -13,
+        code: 'EACCES',
+        syscall: 'open',
+        path
+    }
+}
+
+function rerequire(name) {
+    delete require.cache[require.resolve(name)];
+    return require(name);
+}
+
+process.on('unhandledRejection', console.log);
