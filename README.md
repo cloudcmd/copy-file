@@ -50,7 +50,6 @@ You can use `copyFile` as a promise:
 
 ```js
 const {promisify} = require('es6-promisify');
-const tryToCatch = require('try-to-catch');
 const copyFile = promisify(require('@cloudcmd/copy-file'));
 
 const ok = () => 'ok';
