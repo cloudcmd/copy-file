@@ -5,9 +5,9 @@ const {tmpdir} = require('os');
 const {join} = require('path');
 
 const test = require('tape');
+const wraptile = require('wraptile');
 const tryCatch = require('try-catch');
 const tryToCatch = require('try-to-catch');
-const copyFile = require('..');
 const noop = () => {};
 const {promisify} = require('es6-promisify');
 const through2 = require('through2');
@@ -16,6 +16,8 @@ const squad = require('squad');
 
 const diff = require('sinon-called-with-diff');
 const sinon = diff(require('sinon'));
+
+const copyFile = require('..');
 
 const getErrorStream = require('./fixture/error-stream');
 
@@ -68,8 +70,10 @@ test('copyFile: createWriteStream', async (t) => {
     
     const {createWriteStream} = fs;
     
-    fs.createWriteStream = sinon.stub().returns(through2(echo));
-
+    fs.createWriteStream = sinon
+        .stub()
+        .returns(wraptile(through2, echo));
+    
     const src = '/';
     const dest = '/world';
     
