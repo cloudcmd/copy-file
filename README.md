@@ -89,12 +89,12 @@ MIT
 
 [NPMIMGURL]:                https://img.shields.io/npm/v/@cloudcmd/copy-file.svg?style=flat
 [BuildStatusIMGURL]:        https://img.shields.io/travis/cloudcmd/copy-file/master.svg?style=flat
-[DependencyStatusIMGURL]:   https://img.shields.io/gemnasium/cloudcmd/copy-file.svg?style=flat
+[DependencyStatusIMGURL]:   https://img.shields.io/david/cloudcmd/copy-file.svg?style=flat
 [LicenseIMGURL]:            https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
 [CoverageIMGURL]:           https://coveralls.io/repos/cloudcmd/copy-file/badge.svg?branch=master&service=github
 [NPMURL]:                   https://npmjs.org/package/@cloudcmd/copy-file "npm"
 [BuildStatusURL]:           https://travis-ci.org/cloudcmd/copy-file  "Build Status"
-[DependencyStatusURL]:      https://gemnasium.com/cloudcmd/copy-file "Dependency Status"
+[DependencyStatusURL]:      https://david-dm.org/cloudcmd/copy-file "Dependency Status"
 [LicenseURL]:               https://tldrlegal.com/license/mit-license "MIT License"
 [CoverageURL]:              https://coveralls.io/github/cloudcmd/copy-file?branch=master
 
