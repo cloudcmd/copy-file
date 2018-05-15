@@ -5,7 +5,6 @@ const {tmpdir} = require('os');
 const {join} = require('path');
 
 const test = require('tape');
-const wraptile = require('wraptile');
 const tryCatch = require('try-catch');
 const tryToCatch = require('try-to-catch');
 const noop = () => {};
@@ -70,9 +69,13 @@ test('copyFile: createWriteStream', async (t) => {
     
     const {createWriteStream} = fs;
     
+    const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
+        value: sinon.stub()
+    });
+    
     fs.createWriteStream = sinon
         .stub()
-        .returns(wraptile(through2, echo));
+        .returns(getStream());
     
     const src = '/';
     const dest = '/world';
