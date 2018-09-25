@@ -15,6 +15,7 @@ const squad = require('squad');
 
 const diff = require('sinon-called-with-diff');
 const sinon = diff(require('sinon'));
+const {reRequire} = require('mock-require');
 
 const copyFile = require('..');
 
@@ -25,82 +26,72 @@ const getEACCESStream = squad(getErrorStream, getEACCESS);
 
 const temp = () => fs.mkdtempSync(join(tmpdir(), 'copy-file-'));
 
-test('copyFile: no args', (t) => {
-    t.throws(copyFile, /src should be a string!/, 'should throw when no args');
+test('copyFile: no args', async (t) => {
+    const [e] = await tryToCatch(copyFile);
+    
+    t.equal(e.message, 'src should be a string!', 'should throw when no args');
     t.end();
 });
 
-test('copyFile: no dest', (t) => {
-    const fn = () => copyFile('/');
+test('copyFile: no dest', async (t) => {
+    const [e] = await tryToCatch(copyFile, '/');
     
-    t.throws(fn, /dest should be a string!/, 'should throw when no dest');
+    t.ok(e.message, 'dest should be a string!', 'should throw when no dest');
     t.end();
 });
 
-test('copyFile: no callback', (t) => {
-    const fn = () => copyFile('/', '/tmp');
+test('copyFile: no callback', async (t) => {
+    const [e] = await tryToCatch(copyFile, '/', '/tmp', 'hi');
     
-    t.throws(fn, /callback should be a function!/, 'should throw when no callback');
-    t.end();
-});
-
-test('copyFile: no callback', (t) => {
-    const fn = () => copyFile('/', '/tmp', 'hi', noop);
-    
-    t.throws(fn, /streams should be an array!/, 'should throw when no args');
+    t.equal(e.message, 'streams should be an array!', 'should throw when no args');
     t.end();
 });
 
 test('copyFile: not a file', async (t) => {
-    const _copyFile = promisify(copyFile);
     const src = '/';
     const dest = '/world';
     
-    const [e] = await tryToCatch(_copyFile, src, dest);
+    const [e] = await tryToCatch(copyFile, src, dest);
     
     t.equal(e.code, 'EISDIR', 'should equal');
-    
     t.end();
 });
 
 test('copyFile: createWriteStream', async (t) => {
-    const _copyFile = promisify(copyFile);
     const _stat = promisify(fs.stat);
-    
     const {createWriteStream} = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
         value: sinon.stub()
     });
     
-    fs.createWriteStream = sinon
+    const createWriteStreamStub = sinon
         .stub()
         .returns(getStream());
+    
+    fs.createWriteStream = createWriteStreamStub;
     
     const src = '/';
     const dest = '/world';
     
-    await tryToCatch(_copyFile, src, dest);
+    const copyFile = reRequire('..');
+    await tryToCatch(copyFile, src, dest);
     
     const {mode} = await _stat(src);
     
-    t.ok(fs.createWriteStream.calledWith(dest, {mode}), 'should call createWriteStream');
-    
     fs.createWriteStream = createWriteStream;
     
+    t.ok(createWriteStreamStub.calledWith(dest, {mode}), 'should call createWriteStream');
     t.end();
 });
 
 test('copyFile: no src', async (t) => {
-    const _copyFile = promisify(copyFile);
-
     const src = '/hello-world-copy-file';
     const dest = '/world';
     
-    const [e] = await tryToCatch(_copyFile, src, dest);
+    const [e] = await tryToCatch(copyFile, src, dest);
     
     t.equal(e.code, 'ENOENT', 'should equal');
-    
     t.end();
 });
 
@@ -120,9 +111,8 @@ test('copyFile: src: EACCESS', async (t) => {
     
     fs.createReadStream = getEACCESStream(src);
     
-    const _copyFile = promisify(rerequire('..'));
-    
-    await tryToCatch(_copyFile, src, dest);
+    const copyFile = reRequire('..');
+    await tryToCatch(copyFile, src, dest);
     const [e] = tryCatch(fs.statSync, dest);
     
     fs.stat = stat;
@@ -138,9 +128,9 @@ test('copyFile', async (t) => {
     const tmp = temp();
     const dest = `${tmp}/copy`;
     
-    const _copyFile = promisify(rerequire('..'));
+    const copyFile = reRequire('..');
     
-    await tryToCatch(_copyFile, src, dest);
+    await tryToCatch(copyFile, src, dest);
     const [e] = tryCatch(fs.statSync, dest);
     
     rimraf.sync(tmp);
@@ -159,9 +149,5 @@ function getEACCESS(path) {
     }
 }
 
-function rerequire(name) {
-    delete require.cache[require.resolve(name)];
-    return require(name);
-}
-
 process.on('unhandledRejection', console.log);
+

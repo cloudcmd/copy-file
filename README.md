@@ -2,7 +2,6 @@
 
 Simply copy a file. If an error occurs after the destination file has been opened for writing, `copy-file` will attempt to remove the destination.
 
-
 ## Install
 
 ```
@@ -11,46 +10,14 @@ npm i @cloudcmd/copy-file
 
 ## API
 
-### copyFile(src, dest [, streams], callback)
+### copyFile(src, dest [, streams])
 
 - `src` `<string>` - source filename to copy
 - `dest` `<string>`-  destination filename of the copy operation
 - `streams` `<array>`-  file processing streams (optional)
-- `callback` `<function>`-  callback will be called at the end or on when error occures
-
 
 ```js
 const copyFile = require('@cloudcmd/copy-file');
-
-copyFile('./package.json', './package2.json', (e) => {
-    if (!e)
-        return;
-    
-    console.error(e.message);
-});
-```
-
-You can use preprocessing `streams` of copied file:
-
-```js
-const copyFile = require('@cloudcmd/copy-file');
-
-const zlib = require('zlib');
-const gzip = zlib.createGzip();
-
-copyFile('./package.json', './package.gz', [gzip], (e) => {
-    if (!e)
-        return;
-    
-    console.error(e.message);
-});
-```
-
-You can use `copyFile` as a promise:
-
-```js
-const {promisify} = require('es6-promisify');
-const copyFile = promisify(require('@cloudcmd/copy-file'));
 
 const ok = () => 'ok';
 const error = (e) => e.message;
@@ -61,12 +28,28 @@ copyFile('./package.json', './package2.json')
     .then(console.log);
 ```
 
-You can use `copyFile` as a promise with `async-await`:
+You can use preprocessing `streams` of copied file:
+
+```js
+const copyFile = require('@cloudcmd/copy-file');
+
+const zlib = require('zlib');
+const gzip = zlib.createGzip();
+
+const ok = () => 'ok';
+const error = (e) => e.message;
+
+copyFile('./package.json', './package2.json', [gzip])
+    .then(ok)
+    .catch(error)
+    .then(console.log);
+```
+
+You can use `copyFile` with `async-await`:
 
 ```js
 const tryToCatch = require('try-to-catch');
-const {promisify} = require('es6-promisify');
-const copyFile = promisify(require('@cloudcmd/copy-file'));
+const copyFile = require('@cloudcmd/copy-file');
 
 (async () => {
     const [e] = await tryToCatch(copyFile, './package.json', './package2.json');
