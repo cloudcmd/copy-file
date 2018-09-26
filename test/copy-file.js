@@ -84,6 +84,40 @@ test('copyFile: createWriteStream', async (t) => {
     t.end();
 });
 
+test('copyFile: createWriteStream: symlink', async (t) => {
+    const {createWriteStream} = fs;
+    
+    const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
+        value: sinon.stub()
+    });
+    
+    const createWriteStreamStub = sinon
+        .stub()
+        .returns(getStream());
+    
+    const {lstat} = fs;
+    fs.lstat = (name, cb) => {
+        cb(null, {
+            isSymbolicLink: sinon.stub()
+                .returns(true)
+        });
+    };
+    
+    fs.createWriteStream = createWriteStreamStub;
+    
+    const src = '/';
+    const dest = '/world';
+    
+    const copyFile = reRequire('..');
+    await tryToCatch(copyFile, src, dest);
+    
+    fs.createWriteStream = createWriteStream;
+    fs.lstat = lstat;
+    
+    t.notOk(createWriteStreamStub.called, 'should call createWriteStream');
+    t.end();
+});
+
 test('copyFile: no src', async (t) => {
     const src = '/hello-world-copy-file';
     const dest = '/world';
