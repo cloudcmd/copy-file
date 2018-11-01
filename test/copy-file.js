@@ -52,7 +52,7 @@ test('copyFile: not a file', async (t) => {
     
     const [e] = await tryToCatch(copyFile, src, dest);
     
-    t.equal(e.code, 'EISDIR', 'should equal');
+    t.ok(/^E(ACCES|ISDIR)$/.test(e.code), 'should equal');
     t.end();
 });
 
