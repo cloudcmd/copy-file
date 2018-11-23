@@ -3,6 +3,7 @@
   "version": "2.1.1",
   "description": "simply copy a file",
   "main": "lib/copy-file.js",
+  "access": "public",
   "scripts": {
     "watch:coverage": "npm run watcher -- npm run coverage",
     "watch:test": "npm run watcher -- npm test",
