@@ -1,3 +1,10 @@
+2018.11.23, v2.1.2
+
+feature:
+- (package) through2 v3.0.0
+- (copy-file) sinon, sinon-called-with-diff -> @cloudcmd/stub
+
+
 2018.11.01, v2.1.1
 
 fix:
