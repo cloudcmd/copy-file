@@ -11,9 +11,8 @@ const {promisify} = require('util');
 const through2 = require('through2');
 const rimraf = require('rimraf');
 const squad = require('squad');
+const stub = require('@cloudcmd/stub');
 
-const diff = require('sinon-called-with-diff');
-const sinon = diff(require('sinon'));
 const {reRequire} = require('mock-require');
 
 const copyFile = require('..');
@@ -61,11 +60,10 @@ test('copyFile: createWriteStream', async (t) => {
     const {createWriteStream} = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
-        value: sinon.stub()
+        value: stub()
     });
     
-    const createWriteStreamStub = sinon
-        .stub()
+    const createWriteStreamStub = stub()
         .returns(getStream());
     
     fs.createWriteStream = createWriteStreamStub;
@@ -88,17 +86,16 @@ test('copyFile: createWriteStream: symlink', async (t) => {
     const {createWriteStream} = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
-        value: sinon.stub()
+        value: stub()
     });
     
-    const createWriteStreamStub = sinon
-        .stub()
+    const createWriteStreamStub = stub()
         .returns(getStream());
     
     const {lstat} = fs;
     fs.lstat = (name, cb) => {
         cb(null, {
-            isSymbolicLink: sinon.stub()
+            isSymbolicLink: stub()
                 .returns(true)
         });
     };
