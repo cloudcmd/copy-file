@@ -56,5 +56,8 @@
   "bugs": {
     "url": "https://github.com/cloudcmd/copy-file/issues"
   },
-  "homepage": "https://github.com/cloudcmd/copy-file"
+  "homepage": "https://github.com/cloudcmd/copy-file",
+  "publishConfig": {
+    "access": "public"
+  }
 }
