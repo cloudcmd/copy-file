@@ -4,7 +4,7 @@ const fs = require('fs');
 const {tmpdir} = require('os');
 const {join} = require('path');
 
-const test = require('tape');
+const test = require('supertape');
 const tryCatch = require('try-catch');
 const tryToCatch = require('try-to-catch');
 const {promisify} = require('util');
@@ -60,7 +60,7 @@ test('copyFile: createWriteStream', async (t) => {
     const {createWriteStream} = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
-        value: stub()
+        value: stub(),
     });
     
     const createWriteStreamStub = stub()
@@ -83,20 +83,22 @@ test('copyFile: createWriteStream', async (t) => {
 });
 
 test('copyFile: createWriteStream: symlink', async (t) => {
-    const {createWriteStream} = fs;
+    const {
+        createWriteStream,
+        lstat,
+    } = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
-        value: stub()
+        value: stub(),
     });
     
     const createWriteStreamStub = stub()
         .returns(getStream());
     
-    const {lstat} = fs;
     fs.lstat = (name, cb) => {
         cb(null, {
             isSymbolicLink: stub()
-                .returns(true)
+                .returns(true),
         });
     };
     
@@ -126,7 +128,7 @@ test('copyFile: no src', async (t) => {
 });
 
 test('copyFile: src: EACCESS', async (t) => {
-    const src = '/boot/System.map-4.4.0-122-generic1'
+    const src = '/boot/System.map-4.4.0-122-generic1';
     const tmpdir = temp();
     const dest = `${tmpdir}/EACCESS`;
     
@@ -136,7 +138,7 @@ test('copyFile: src: EACCESS', async (t) => {
     } = fs;
     
     fs.stat = (_, fn) => fn(null, {
-        mod: 777
+        mod: 777,
     });
     
     fs.createReadStream = getEACCESStream(src);
@@ -175,8 +177,8 @@ function getEACCESS(path) {
         errno: -13,
         code: 'EACCES',
         syscall: 'open',
-        path
-    }
+        path,
+    };
 }
 
 process.on('unhandledRejection', console.log);
