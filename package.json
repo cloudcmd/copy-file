@@ -19,7 +19,7 @@
     "copy-symlink": "^1.0.0",
     "pipe-io": "^3.0.0",
     "try-to-catch": "^1.0.2",
-    "wraptile": "^2.0.0"
+    "wraptile": "^3.0.0"
   },
   "devDependencies": {
     "@cloudcmd/stub": "^2.0.0",
