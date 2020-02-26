@@ -37,7 +37,7 @@
     "squad": "^3.0.0",
     "supertape": "^1.2.3",
     "through2": "^3.0.0",
-    "try-catch": "^2.0.0"
+    "try-catch": "^3.0.0"
   },
   "engines": {
     "node": ">=8.0.0"
