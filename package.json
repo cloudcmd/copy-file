@@ -18,7 +18,7 @@
   "dependencies": {
     "copy-symlink": "^1.0.0",
     "pipe-io": "^4.0.0",
-    "try-to-catch": "^2.0.0",
+    "try-to-catch": "^3.0.0",
     "wraptile": "^3.0.0"
   },
   "devDependencies": {
