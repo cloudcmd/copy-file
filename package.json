@@ -32,7 +32,6 @@
     "nodemon": "^1.11.0",
     "nyc": "^15.0.0",
     "putout": "^7.13.4",
-    "redrun": "^7.0.2",
     "rimraf": "^3.0.0",
     "squad": "^3.0.0",
     "supertape": "^1.2.3",
@@ -40,7 +39,7 @@
     "try-catch": "^3.0.0"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "repository": {
     "type": "git",

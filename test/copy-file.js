@@ -1,13 +1,13 @@
 'use strict';
 
 const fs = require('fs');
+const {stat} = fs.promises;
 const {tmpdir} = require('os');
 const {join} = require('path');
 
 const test = require('supertape');
 const tryCatch = require('try-catch');
 const tryToCatch = require('try-to-catch');
-const {promisify} = require('util');
 const through2 = require('through2');
 const rimraf = require('rimraf');
 const squad = require('squad');
@@ -56,7 +56,6 @@ test('copyFile: not a file', async (t) => {
 });
 
 test('copyFile: createWriteStream', async (t) => {
-    const _stat = promisify(fs.stat);
     const {createWriteStream} = fs;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
@@ -74,7 +73,7 @@ test('copyFile: createWriteStream', async (t) => {
     const copyFile = reRequire('..');
     await tryToCatch(copyFile, src, dest);
     
-    const {mode} = await _stat(src);
+    const {mode} = await stat(src);
     
     fs.createWriteStream = createWriteStream;
     
@@ -83,10 +82,9 @@ test('copyFile: createWriteStream', async (t) => {
 });
 
 test('copyFile: createWriteStream: symlink', async (t) => {
-    const {
-        createWriteStream,
-        lstat,
-    } = fs;
+    const {createWriteStream} = fs;
+    
+    const {lstat} = fs.promises;
     
     const getStream = () => Object.defineProperty(through2(echo), 'removeListener', {
         value: stub(),
@@ -95,12 +93,10 @@ test('copyFile: createWriteStream: symlink', async (t) => {
     const createWriteStreamStub = stub()
         .returns(getStream());
     
-    fs.lstat = (name, cb) => {
-        cb(null, {
-            isSymbolicLink: stub()
-                .returns(true),
-        });
-    };
+    fs.promises.lstat = async () => ({
+        isSymbolicLink: stub()
+            .returns(true),
+    });
     
     fs.createWriteStream = createWriteStreamStub;
     
@@ -111,7 +107,7 @@ test('copyFile: createWriteStream: symlink', async (t) => {
     await tryToCatch(copyFile, src, dest);
     
     fs.createWriteStream = createWriteStream;
-    fs.lstat = lstat;
+    fs.promises.lstat = lstat;
     
     t.notOk(createWriteStreamStub.called, 'should call createWriteStream');
     t.end();
