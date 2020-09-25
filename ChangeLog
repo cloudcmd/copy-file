@@ -1,3 +1,16 @@
+2020.09.25, v3.0.1
+
+feature:
+- (package) copy-symlink v2.0.0
+- (package) eslint-plugin-putout v5.1.1
+- (package) through2 v4.0.2
+- (package) supertape v2.0.1
+- (package) putout v10.0.3
+- (package) madrun v7.0.4
+- (package) @cloudcmd/stub v3.1.0
+- (package) eslint v7.9.0
+
+
 2020.02.27, v3.0.0
 
 feature:

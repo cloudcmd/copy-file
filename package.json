@@ -1,6 +1,6 @@
 {
   "name": "@cloudcmd/copy-file",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "simply copy a file",
   "main": "lib/copy-file.js",
   "access": "public",
