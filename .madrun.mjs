@@ -10,7 +10,6 @@ export default {
     'lint': () => 'putout .',
     'fresh:lint': () => run('lint', '--fresh'),
     'lint:fresh': () => run('lint', '--fresh'),
-    'lint:test': () => 'putout test -c .putoutrc.test',
     'fix:lint': () => run('lint', '--fix'),
 };
 

@@ -12,7 +12,8 @@
     "coverage": "madrun coverage",
     "report": "madrun report",
     "lint": "madrun lint",
-    "lint:test": "madrun lint:test",
+    "fresh:lint": "madrun fresh:lint",
+    "lint:fresh": "madrun lint:fresh",
     "fix:lint": "madrun fix:lint"
   },
   "dependencies": {
