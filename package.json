@@ -39,7 +39,7 @@
     "try-catch": "^3.0.0"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=14"
   },
   "repository": {
     "type": "git",
