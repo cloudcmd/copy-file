@@ -77,7 +77,7 @@ test('copyFile: createWriteStream', async (t) => {
     
     fs.createWriteStream = createWriteStream;
     
-    t.ok(createWriteStreamStub.calledWith(dest, {mode}), 'should call createWriteStream');
+    t.calledWith(createWriteStreamStub, [dest, {mode}], 'should call createWriteStream');
     t.end();
 });
 
@@ -147,7 +147,7 @@ test('copyFile: src: EACCESS', async (t) => {
     fs.createReadStream = createReadStream;
     rimraf.sync(tmpdir);
     
-    t.equal(e && e.code, 'ENOENT', 'should call unlink');
+    t.equal(e?.code, 'ENOENT', 'should call unlink');
     t.end();
 });
 
