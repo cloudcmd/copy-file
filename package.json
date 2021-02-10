@@ -34,7 +34,7 @@
     "putout": "^14.2.0",
     "rimraf": "^3.0.0",
     "squad": "^3.0.0",
-    "supertape": "^2.0.1",
+    "supertape": "^4.9.1",
     "through2": "^4.0.2",
     "try-catch": "^3.0.0"
   },
